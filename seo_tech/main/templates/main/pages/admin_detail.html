@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block other_stylesheet %}
+    <link rel="stylesheet" href="{% static 'css/Post-Template.css' %}" media="screen">
+{% endblock %}
+
+
+{% block content %}
+<section class="u-align-center u-clearfix u-section-1" id="sec-1c55">
+    <div class="u-clearfix u-sheet u-valign-middle-md u-valign-middle-sm u-valign-middle-xs u-sheet-1">
+        <div class="u-container-style u-expanded-width u-post-details u-post-details-1">
+            <div class="u-container-layout u-valign-middle u-container-layout-1">
+                <img src="{% static 'img/68f64b9d.jpeg' %}" height="150px">
+                <div class="u-blog-control u-metadata u-metadata-1">
+                    <b><em><span class="u-meta-date u-meta-icon" style="font-size:14px;">{{ letter.name }}</span></em></b>
+                    <b><em><span class="u-meta-date u-meta-icon" style="font-size:14px; float: right; margin-right:30px"><a href="mailto:{{ letter.mail }}">{{ letter.mail }}</a></span></em></b>
+                </div>
+                <div class="u-align-justify u-blog-control u-post-content u-text u-text-2 fr-view">
+                    {{ letter.message }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

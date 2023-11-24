@@ -1,0 +1,80 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<style>
+form{
+text-align: center;
+}
+
+input[type=text], input[type=url], input[type=checkbox] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+input[type=text], input[type=url] {
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+input[type=text], input[type=url]:focus {
+    width: 100%;
+}
+textarea {
+    width: 100%;
+    height: 350px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+}
+select {
+    width: 100%;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #98FB98;
+}
+
+input[type=button], input[type=submit], input[type=reset], input[type=checkbox] {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+</style>
+
+<section class="u-align-center u-clearfix u-section-5" id="carousel_dabc">
+                <h3 style="margin: 20px;">Изменить запись</h3>
+                <form method="post" class="u-clearfix u-form-spacing-15 u-form-vertical u-inner-form" style="max-width:500px; margin: 30px;">
+                    {% csrf_token %}
+                    {{ form.as_table }}
+                    <input type="submit" value="Изменить!" onclick="change()">
+                    <a href="{% url 'blog:article' slug %}"><input type="button" value="Вернуться" style="background-color:MediumPurple"></a>
+              </form>
+    <div id= "changed" style="display:none; width: 500px; background-color:#4CAF50; margin: 30px">
+        <p>Изменения успешно применены</p>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block script %}
+<script>
+const elem = document.getElementById("changed")
+
+function change() {
+elem.style.display = "block"
+setTimeout(() => elem.style.display = "none", 1500);
+}
+
+</script>
+{% endblock %}

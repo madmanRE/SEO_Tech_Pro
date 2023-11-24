@@ -1,0 +1,61 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block other_stylesheet %}
+<link rel="stylesheet" href="{% static 'css/Blog-Template.css' %}" media="screen">
+{% endblock %}
+
+
+{% block content %}
+
+<section class="u-clearfix u-section-1" id="sec-8ad0">
+    <form class="search-form" method="get" action="{% url 'blog:search' %}">
+        {% csrf_token %}
+        <input type="text" name="query" placeholder="Поиск">
+        <button type="submit">Найти</button>
+    </form>
+
+    <div class="tag-cloud">
+        {% for cat in categories %}
+        <a href="{% url 'blog:category' cat.slug %}" class="tag">{{ cat.title }}</a>
+        {% endfor %}
+    </div>
+
+    <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+
+
+    <div class="u-blog u-expanded-width u-repeater u-repeater-1">
+      {% for post in posts %}
+        {% if forloop.counter0|divisibleby:3 %}
+        {% endif %}
+        <div class="u-blog-post u-container-style u-repeater-item u-white u-repeater-item-1" style="margin-top:50px; margin-bottom:50px;">
+          <div class="u-container-layout u-similar-container u-valign-top u-container-layout-1" style="width:300px; height:300px;">
+            <h4 class="u-blog-control u-text u-text-1" style="font-size:20px; color:black">
+              <a class="u-post-header-link" href="{% url 'blog:article' slug=post.slug %}">{{ post.title | truncatechars:16 }}</a>
+              {% if user.is_superuser %}
+                <a href="{% url 'blog:update_post' post.slug %}" title="Редактировать">&#9998;</a>
+              {% endif %}
+            </h4>
+            <a class="u-post-header-link" href="{% url 'blog:article' slug=post.slug %}">
+              <img alt="{{ post.title }}" class="u-blog-control u-expanded-width u-image u-image-default u-image-1 blog-item" src="{{ post.image }}" width="300px" height="300px">
+            </a>
+            <div class="u-blog-control u-post-content u-text u-text-2 fr-view">
+              {% autoescape off %}
+                {{ post.text | truncatechars:25 }}
+              {% endautoescape %}
+                <a href="{% url 'blog:article' slug=post.slug %}" class="u-blog-control u-border-2 u-border-palette-1-base u-btn u-btn-rectangle u-button-style u-none u-btn-1">Читать</a>
+            </div>
+
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+
+    </div>
+</section>
+{% endblock %}

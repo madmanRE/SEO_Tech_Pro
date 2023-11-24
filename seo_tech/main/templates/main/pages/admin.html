@@ -1,0 +1,109 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block style %}
+<style type="text/css">
+
+section {
+min-height:600px;
+margin: 40px;
+}
+.unread {
+max-width: 700px;
+background-color: #F08080;
+}
+.read{
+max-width: 700px;
+background-color: #2E8B57;
+}
+
+a{
+color: black;
+}
+a:hover{
+color: white;
+font-size: 18px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    min-width: 250px;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.message {
+min-width: 350px;
+}
+
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section>
+    <h4>Новые уведомления</h4>
+    {% if new_letters %}
+    <table class="unread">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Email</th>
+                <th>Сообщение</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for let in new_letters %}
+            <tr>
+                <td><a href="{% url 'main:admin_detail_view' pk=let.pk %}">{{ let.name }}</a></td>
+                <td><a href="{% url 'main:admin_detail_view' pk=let.pk %}">{{ let.mail }}</a></td>
+                <td class="message">{{ let.message|truncatechars:50 }}</td>
+                <td style="text-align:center">&#10008;</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    <hr>
+
+    <h4>Прочитанные уведомления</h4>
+    {% if read_letters %}
+    <table class="read" id="read">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Email</th>
+                <th>Сообщение</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for let in read_letters %}
+            <tr>
+                <td><a href="{% url 'main:admin_detail_view' pk=let.pk %}">{{ let.name }}</a></td>
+                <td><a href="{% url 'main:admin_detail_view' pk=let.pk %}">{{ let.mail }}</a></td>
+                <td class="message">{{ let.message|truncatechars:50 }}</td>
+                <td style="text-align:center">&#10004;</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</section>
+
+{% endblock %}
