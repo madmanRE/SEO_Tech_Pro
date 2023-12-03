@@ -1,28 +1,41 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import BlogPost, BlogCategory
 from .forms import BlogPostForm, SearchForm
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView, DeleteView
 from django.db.models import Q
+from django.db.models import Count
 
 
 class BlogPostListView(ListView):
     template_name = "blog/blog.html"
     context_object_name = "posts"
+    paginate_by = 12
+
+    def get(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        self.paginator = Paginator(self.object_list, self.paginate_by)
+        page_number = request.GET.get("page")
+        self.page = self.paginator.get_page(page_number)
+        context = self.get_context_data()
+        return self.render_to_response(context)
 
     def get_queryset(self):
         return BlogPost.objects.filter(is_active=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        categories = BlogCategory.objects.all()
+        categories = BlogCategory.objects.annotate(num_items=Count("items"))
+        categories_with_items = categories.filter(num_items__gt=0)
+        context["page"] = self.page
         context[
             "title"
         ] = "SEO_Tech | Сборник новостей и статей о SEO, программировании и маркетинге"
-        context["categories"] = categories
+        context["categories"] = categories_with_items
         return context
 
 

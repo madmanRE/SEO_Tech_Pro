@@ -7,6 +7,7 @@
 
 {% block other_stylesheet %}
 <link rel="stylesheet" href="{% static 'css/Blog-Template.css' %}" media="screen">
+<link rel="stylesheet" href="{% static 'css/pagen.css' %}" media="screen">
 {% endblock %}
 
 
@@ -35,7 +36,7 @@
         <div class="u-blog-post u-container-style u-repeater-item u-white u-repeater-item-1" style="margin-top:50px; margin-bottom:50px;">
           <div class="u-container-layout u-similar-container u-valign-top u-container-layout-1" style="width:300px; height:300px;">
             <h4 class="u-blog-control u-text u-text-1" style="font-size:20px; color:black">
-              <a class="u-post-header-link" href="{% url 'blog:article' slug=post.slug %}">{{ post.title | truncatechars:16 }}</a>
+              <a class="u-post-header-link" href="{% url 'blog:article' slug=post.slug %}">{{ post.title | truncatechars:22 }}</a>
               {% if user.is_superuser %}
                 <a href="{% url 'blog:update_post' post.slug %}" title="Редактировать">&#9998;</a>
               {% endif %}
@@ -57,5 +58,34 @@
 
 
     </div>
+
+    <div class="center">
+        <div class="my_pagination">
+            {% if page.has_previous %}
+            <a aria-label="Предыдущая страница" href="?page={{ page.previous_page_number }}">«</a>
+            {% else %}
+            <a aria-label="Предыдущая страница">«</a>
+            {% endif %}
+
+            {% for num in page.paginator.page_range %}
+            {% if num == page.number %}
+            <a class="active">{{ num }}</a>
+            {% else %}
+            <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+
+            {% if page.has_next %}
+             <a aria-label="Следующая страница" href="?page={{ page.next_page_number }}">»</a>
+            {% else %}
+            <a aria-label="Следующая страница">»</a>
+            {% endif %}
+        </div>
+    </div>
+
+
+
+
+
 </section>
 {% endblock %}
